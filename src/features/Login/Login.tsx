@@ -1,43 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { useFormik } from 'formik';
-import './Login.css';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { loginInitiate } from './LoginAction';
-import { UserCredential } from 'firebase/auth';
+import React, { useEffect, useState } from 'react'
+import { useFormik } from 'formik'
+import './Login.css'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { loginInitiate } from './LoginAction'
+import { UserCredential } from 'firebase/auth'
 export interface LoginState {
-  email?: string;
-  password?: string;
+  email?: string
+  password?: string
 }
 const validate = (values: LoginState) => {
-  let errors: LoginState = { email: '', password: '' };
+  let errors: LoginState = { email: '', password: '' }
 
   if (!values.email) {
-    errors.email = 'Required';
+    errors.email = 'Required'
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address';
+    errors.email = 'Invalid email address'
   }
   if (!values.password) {
-    errors.password = 'Required';
+    errors.password = 'Required'
   } else if (values.password.length < 6) {
-    errors.password = 'Must be 6 characters or less';
+    errors.password = 'Must be 6 characters or less'
   }
-  if (errors.email === '' && errors.password === '') errors = {};
-  return errors;
-};
+  if (errors.email === '' && errors.password === '') errors = {}
+  return errors
+}
 const Login = () => {
   // Pass the useFormik() hook initial form values and a submit function that will
   // be called when the form is submitted
-  const user = useAppSelector((state) => state.login.currentUser);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState<UserCredential>();
+  const user = useAppSelector((state) => state.login.currentUser)
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const [currentUser, setCurrentUser] = useState<UserCredential>()
   useEffect(() => {
-    console.log(user);
-
-    if (currentUser) navigate('/home');
-    setCurrentUser(user);
-  }, [currentUser]);
+    console.log(user)
+    if (currentUser) navigate('/home')
+    setCurrentUser(user)
+  }, [user])
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -47,10 +46,10 @@ const Login = () => {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: (values) => {
-      formik.setSubmitting(false);
-      dispatch(loginInitiate(values.email, values.password));
+      formik.setSubmitting(false)
+      dispatch(loginInitiate(values.email, values.password))
     },
-  });
+  })
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -107,6 +106,6 @@ const Login = () => {
         </form>
       </div>
     </div>
-  );
-};
-export default Login;
+  )
+}
+export default Login
